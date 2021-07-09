@@ -1,0 +1,264 @@
+﻿@model OnlineMovieTicketBookingApp.Models.MovieTimeViewModel
+@*@model OnlineMovieTicketBookingApp.Models.Movie*@
+
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+
+<style>
+    .view-details{
+        background-image:url(@Model.Movie.BgImage);
+        background-size:cover;
+        background-repeat: no-repeat;
+        height:1000px;
+
+    }
+    video{
+        width:40%;
+        height: auto;
+        position: relative;
+        left:50px;
+        top: 100px;
+
+    }
+        .watch {
+            top: 100px;
+            position: relative;
+            text-align: center;
+            width: 600px;
+            color:darkgrey;
+        }
+        .details {
+            color: white;
+            left: 50px;
+            top: 110px;
+            position: relative;
+            text-align: left;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 550px;
+        }
+        .label {
+            color:darkgrey;
+        }
+    .show-times {
+        text-align: center;
+        background-color: black;
+        height: auto;
+        color: white;
+    }
+        .view-showtimes{
+            /*left: 80px;*/
+           /* position: relative;*/
+            text-align:center;
+            margin-left: auto;
+            margin-right: auto;
+            
+        }
+        .button-container{
+            width:100px;
+            margin: 5px;
+            padding:5px;
+            border: 1px solid white;
+            float:left;
+            left:370px;
+            position: relative;
+         }
+        .showtime-date{
+            position:absolute;
+            left:550px;
+            float:left;
+        }
+</style>
+
+<section class="view-details">
+
+    <div class="watch">
+        <h4>Watch the trailer</h4>
+    </div>
+
+    <video src=@(Model.Movie.Trailer) controls> </video>
+
+    <div class="details">
+        <h5>Movie Details</h5>
+        <table>
+            <tr>
+                <td class="label">Genre: </td>
+                <td>@Html.DisplayFor(model => model.Movie.Genre)</td>
+                <td> </td>
+                <td class="label">Cast:        </td>
+                <td>@Html.DisplayFor(model => model.Movie.Cast)</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td class="label">Rating: </td>
+                <td>@Html.DisplayFor(model => model.Movie.Age_Rating)</td>
+                <td> </td>
+                <td class="label">Director:     </td>
+                <td>@Html.DisplayFor(model => model.Movie.Director)</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td class="label">Language: </td>
+                <td>@Html.DisplayFor(model => model.Movie.Language)</td>
+                <td> </td>
+                <td class="label">Distributor:    </td>
+                <td>@Html.DisplayFor(model => model.Movie.Distributor)</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td class="label">Release: </td>
+                <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", Model.Movie.Release_Date))@*@Html.DisplayFor(model => model.Release_Date)*@</td>
+                <td> </td>
+                <td class="label">Runtime: </td>
+                <td>@Html.DisplayFor(model => model.Movie.Run_Time) minutes</td>
+            </tr>
+        </table>
+        <br /><br />
+        <h5>Synopsis</h5>
+        <p>
+            @Html.DisplayFor(model => model.Movie.Synopsis)
+        </p>
+
+    </div>
+
+</section>
+<section class="show-times">
+    <div>
+        <br />
+        <h4>View Showtimes</h4>
+        @*<p style="color:darkgray;">Select time slot to book your tickets</p>*@
+        @ViewBag.Message
+
+
+    <div>
+        @{ int prevDate = 0;
+            int currDate = 0;
+
+            @foreach (var item in Model.Shows)
+            {
+                @if (item.Date_And_Time.Date >= DateTime.Now.Date)
+                {
+                    prevDate = currDate;
+                    currDate = item.Date_And_Time.Day;
+
+
+                    @if (item.Date_And_Time.Day != prevDate)
+                    {
+                        <br /><br /><br />
+                        @*<b> @item.Date_And_Time.ToLongDateString()</b>*@
+                        <p class="showtime-date"><b>@item.Date_And_Time.ToLongDateString()</b></p>
+                        <br />@*<br />*@
+                              <div class="button-container"> @item.Date_And_Time.ToShortTimeString()</div>
+                        @*var pageName = "Index";
+                        var controller = "Booking";
+                        if (TempData.Peek("CustomerId") == null)
+                        {
+                            pageName = "Login";
+                            controller = "User";
+                        }
+
+
+                        @Html.ActionLink(@item.Date_And_Time.ToShortTimeString(), pageName, controller, new { movieId = item.Id }, new { @class = "btn btn-warning" })*@
+                        @*<a href='@Url.Action("pageName", "controller", new { id = item.Id })' style="text-decoration:none;">
+                            <input type="button" value="@item.Date_And_Time.ToShortTimeString()" class="btn btn-warning" />
+                        </a>*@
+                    }
+                    else
+                    {
+    <div class="button-container"> @item.Date_And_Time.ToShortTimeString()</div>
+                        @*var pageName = "Index";
+                        var controller = "Booking";
+                        if (TempData.Peek("CustomerId") == null)
+                        {
+                            pageName = "Login";
+                            controller = "User";
+                        }
+
+
+                        @Html.ActionLink(@item.Date_And_Time.ToShortTimeString(), pageName, controller, new { movieId = item.Id }, new { @class = "btn btn-warning" })*@
+                        @*<a href='@Url.Action("pageName", "controller", new { id = item.Id })' style="text-decoration:none;">
+                            <input type="button" value="@item.Date_And_Time.ToShortTimeString()" class="btn btn-warning" />
+                        </a>*@
+
+                        prevDate = currDate;
+                    }
+                }
+            }
+        }
+    </div>
+
+        @*<table class="view-showtimes">
+                       @{ int prevDate = 0;
+                           int currDate = 0;
+
+                           @foreach (var item in Model.Shows)
+                           {
+                               @if (item.Date_And_Time.Date >= DateTime.Now.Date)
+                               {
+
+                                   prevDate = currDate;
+                                   currDate = item.Date_And_Time.Day;
+
+
+                                   @if (item.Date_And_Time.Day != prevDate)
+                                   {
+
+                                       <thead>
+                                           <tr> <th>@item.Date_And_Time.ToLongDateString() </th></tr>
+                                       </thead>
+                                       <tr>
+                                           <td>
+                                               <a href='@Url.Action("Details", "Booking", new { id = item.Id })'>
+                                                   <input type="button" value="@item.Date_And_Time.ToShortTimeString()" class="btn btn-outline-secondary" />
+                                               </a>
+                                           </td>
+                                       </tr>
+            }
+                                   else
+                                   {
+                                       <tr>
+                                           <td>
+                                               <a href='@Url.Action("Details", "Booking", new { id = item.Id })'>
+                                                   <input type="button" value="@item.Date_And_Time.ToShortTimeString()" class="btn btn-outline-secondary" />
+                                               </a>
+                                           </td>
+                                       </tr>
+
+                                       prevDate = currDate;
+                                   }
+
+
+                               }
+                           }
+                       }
+
+                   </table>*@
+    </div>
+    <br /><br /><br />
+                <div>
+                    <button onclick="location.href='@Url.Action("Index", "Movie")'" class="btn btn-outline-info">Return to Movies</button>
+
+                    @if (Model.Shows.Count() != 0) { 
+                        
+                            var pageName = "Index";
+                            var controller = "Booking";
+                            if (TempData.Peek("CustomerId") == null)
+                            {
+                                pageName = "Login";
+                                controller = "User";
+                            }
+                        
+                        @Html.ActionLink("Buy Tickets", pageName, controller, new { movieId = Model.Movie.Id }, new { @class = "btn btn-warning" })
+                    }
+                    <br /><br /><br />
+                </div>
+</section>
